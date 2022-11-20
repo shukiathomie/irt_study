@@ -83,6 +83,6 @@ class Heu_Algo:
             X_opt, Y_opt = Heu_Algo.process(self, best_Y)
             best_Y = Y_opt
             # 収束しない時、50回で終了させる
-            if i == 5:
+            if i == 20:
                 return X_opt, Y_opt
         return X_opt, Y_opt
