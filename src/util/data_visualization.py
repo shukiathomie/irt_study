@@ -17,6 +17,22 @@ class data_visualization:
         plt.show()
 
     @classmethod
+    def cluster_icc(cls, X_df, X, n_cluster, J):
+        x = np.arange(1, 11)
+        for j in range(n_cluster):
+            for i in range(J):
+                if X_df["cluster_id"][i] == j:
+                    y = X[i, :]
+                    plt.plot(x, y)
+                else:
+                    continue
+            plt.title(f"cluster_id={j} ICC")
+            plt.xlabel("latent abilities")
+            plt.ylabel("probarility of correct answer")
+            plt.legend()
+            plt.show()
+
+    @classmethod
     def DMM_icc_show(cls, W, Z, J, T):
         x = np.arange(1, 11)
         for j in range(5):

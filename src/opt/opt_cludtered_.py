@@ -34,6 +34,8 @@ def main(T):
     logger.info(f"rsme_class:{rsme_class}")
     # logger.info(f"T_true:{T_true}")
     # logger.info(f"T_est:{T_est}")
+    clustering = Clustering(n_clusters=3, target=X_best)
+    clustering.clustered()
     return X_best, Y_best
 
 
@@ -41,4 +43,3 @@ if __name__ == "__main__":
     T = 10
     J = 10
     X_best, Y_best = main(T)
-    data_visualization.icc_show(X_best, J, T)
