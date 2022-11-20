@@ -11,7 +11,7 @@ from optimize_Z import Opt_Z
 from optimize_W import Opt_W
 
 
-class Heu_Algo:
+class Heu_DMM_Algo:
     def __init__(self, U, Y, T):
         self.U = U
         self.init_Y = Y
@@ -50,7 +50,7 @@ class Heu_Algo:
         # 並列化
         with LoggerUtil.tqdm_joblib(self.J):
             out = Parallel(n_jobs=-1, verbose=0)(
-                delayed(Heu_Algo.Parallel_step1)(self, j) for j in range(self.J)
+                delayed(Heu_DMM_Algo.Parallel_step1)(self, j) for j in range(self.J)
             )
         # self.logger.info(f"{out}")
         X_opt = np.concatenate([[sample[0]] for sample in out], axis=0)
@@ -80,7 +80,7 @@ class Heu_Algo:
         # 並列化
         with LoggerUtil.tqdm_joblib(self.I):
             out = Parallel(n_jobs=-1, verbose=0)(
-                delayed(Heu_Algo.Parallel_step4)(self, i, W_opt, Z_opt)
+                delayed(Heu_DMM_Algo.Parallel_step4)(self, i, W_opt, Z_opt)
                 for i in range(self.I)
             )
         # self.logger.info(f"{out}")

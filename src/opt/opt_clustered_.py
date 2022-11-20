@@ -1,5 +1,4 @@
 import sys
-import numpy as np
 import pandas as pd
 
 sys.path.append("/Users/shukitakeuchi/irt_study/src")
@@ -7,10 +6,12 @@ sys.path.append("/Users/shukitakeuchi/irt_study/src")
 from util.log import LoggerUtil
 from util.data_handling import data_handle
 from util.estimation_accuracy import est_accuracy
-from util.repo import repoUtil
+
+# from util.repo import repoUtil
 from util.clustering import Clustering
 from util.data_visualization import data_visualization
-from MHM.heuristic_algorithm import Heu_Algo
+from MHM.heuristic_algorithm import Heu_MHM_Algo
+from opt.clustered_dmm_algo import Heu_DMM_Algo
 from sklearn.cluster import KMeans
 
 
@@ -26,20 +27,31 @@ def main(T):
     # nparrayに変換
     U, Y, T_true = data_handle.df_to_array(U_df, Y_df, T_true_df)
     # Heuristic Algorithm
-    heu_algo = Heu_Algo(U, Y, T)
-    X_best, Y_best = heu_algo.repeat_process(Y)
+    heu_mhm_algo = Heu_MHM_Algo(U, Y, T)
+    X_best, Y_best = heu_mhm_algo.repeat_process(Y)
     T_est = est_accuracy.show_class(Y_best)
     # ->repoUtil.output_csv(outdpath, T_est, "T_est")
     rsme_class = est_accuracy.rsme_class(T_true, T_est)
     logger.info(f"rsme_class:{rsme_class}")
     # logger.info(f"T_true:{T_true}")
     # logger.info(f"T_est:{T_est}")
-    clustering = Clustering(n_clusters=3, target=X_best)
-    clustering.clustered()
-    return X_best, Y_best
+    n_clusters = 3
+    clustering = Clustering(n_clusters=n_clusters, target=X_best)
+    target_df = clustering.clustered()
+
+    heu_dmm_algo = Heu_DMM_Algo(U, Y, T, target_df, n_clusters)
+    W_est, Y_est, Z_est = heu_dmm_algo.process()
+    T_est = est_accuracy.show_class(Y_est)
+    # repoUtil.output_csv(outdpath, T_est, "T_est")
+    rsme_class = est_accuracy.rsme_class(T_true, T_est)
+    logger.info(f"rsme_class:{rsme_class}")
+    # logger.info(f"T_true:{T_true}")
+    # logger.info(f"T_est:{T_est}")
+    return W_est, Y_est, Z_est
 
 
 if __name__ == "__main__":
     T = 10
     J = 10
-    X_best, Y_best = main(T)
+    W_best, Y_best, Z_best = main(T)
+    data_visualization.DMM_icc_show(W_best, Z_best, J, T)

@@ -6,7 +6,7 @@ from util.data_handling import data_handle
 from util.estimation_accuracy import est_accuracy
 from util.repo import repoUtil
 from util.data_visualization import data_visualization
-from DMM.heuristic_algorithm import Heu_Algo
+from DMM.heuristic_algorithm import Heu_DMM_Algo
 
 
 def main(T):
@@ -21,7 +21,7 @@ def main(T):
     # nparrayに変換
     U, Y, T_true = data_handle.df_to_array(U_df, Y_df, T_true_df)
     # EmAlgorithm
-    heu_algo = Heu_Algo(U, Y, T)
+    heu_algo = Heu_DMM_Algo(U, Y, T)
     W_est, Y_est, Z_est = heu_algo.process()
     T_est = est_accuracy.show_class(Y_est)
     # repoUtil.output_csv(outdpath, T_est, "T_est")

@@ -27,3 +27,4 @@ class Clustering:
         data_visualization.cluster_icc(
             target_df, self.target, n_cluster=self.n_clusters, J=10
         )
+        return target_df
