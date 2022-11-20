@@ -18,9 +18,9 @@ class Clustering:
 
     def clustered(self):
 
-        pred = KMeans(
-            n_clusters=self.n_clusters, init="k-means++", max_iter=300, n_jobs=-1
-        ).fit_predict(self.target)
+        pred = KMeans(n_clusters=self.n_clusters, init="k-means++").fit_predict(
+            self.target
+        )
         self.logger.info(f"pred:{pred}")
         target_df = pd.DataFrame(self.target)
         self.logger.info(f"X_df:{target_df}")

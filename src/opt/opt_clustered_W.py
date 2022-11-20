@@ -1,7 +1,11 @@
 import numpy as np
+import sys
 import pyomo.environ as pyo
 from pyomo.opt import SolverFactory
 from pyomo.environ import *
+
+sys.path.append("/Users/shukitakeuchi/irt_study/src")
+from util.log import LoggerUtil
 
 
 class Opt_W:
@@ -16,6 +20,7 @@ class Opt_W:
         self.target_df = target_df
         self.n_clusters = n_clusters
         self.T = T
+        self.logger = LoggerUtil.get_logger(__name__)
 
     def modeling(self):
         # 非線形最適化モデル作成（minimize)
@@ -45,7 +50,9 @@ class Opt_W:
                 if self.target_df["cluster_id"][j] == 1:
                     k = np.argmax(self.Z[j, :])
                     cluster_list.append(k + 1)
+                    self.logger.info(f"{cluster_list},append{k+1}")
             cluster_list.sort()
+
             for t in self.model.T:
                 for i in range(len(cluster_list) - 1):
                     lhs = (
@@ -55,31 +62,6 @@ class Opt_W:
                     self.model.const.add(lhs >= 0)
 
         # 目的関数
-        """expr = sum(
-            [
-                [
-                    [
-                        [
-                            (
-                                self.Y[i - 1, t - 1]
-                                * self.Z[j - 1, k - 1]
-                                * (
-                                    (self.U[i - 1, j - 1] * log(self.model.W[k, t]))
-                                    + (
-                                        (1 - self.U[i - 1, j - 1])
-                                        * log(1 - self.model.W[k, t])
-                                    )
-                                )
-                            )
-                            for i in self.model.I
-                        ]
-                        for j in self.model.J
-                    ]
-                    for k in self.model.J
-                ]
-                for t in self.model.T
-            ]
-        )"""
         expr = sum(
             (
                 self.Y[i - 1, t - 1]
@@ -101,5 +83,5 @@ class Opt_W:
     def solve(self):
         opt = pyo.SolverFactory(self.solver)
         # opt.options["halt_on_ampl_error"] = "yes"
-        opt.solve(self.model, tee=False)
+        opt.solve(self.model, tee=True)
         return pyo.value(self.model.W[:, :]), self.model.Obj()
