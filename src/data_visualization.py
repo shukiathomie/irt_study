@@ -1,17 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from emalgorithm import EmAlgorithm
 
 
-class data_visualization(EmAlgorithm):
+class data_visualization:
     @classmethod
-    def icc_show(cls, W, a, b, gamma):
+    def icc_show(cls, W, Z, J, T):
         x = np.arange(1, 11)
         for j in range(5):
-            y = 1 / (1 + np.exp(-1.7 * a[j] * (W[j] - b[j])))
+            y = [sum(W[k, t] * Z[j, k] for k in range(J)) for t in range(T)]
             plt.plot(x, y, label=j + 1)
 
-        plt.title("γ =  {} smooth-constraind model ICC".format(gamma))
+        plt.title("Double monotonicity model ICC")
         plt.xlabel("latent abilities")
         plt.ylabel("probarility of correct answer")
         plt.legend()
