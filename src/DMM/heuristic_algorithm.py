@@ -1,5 +1,8 @@
+import sys
 import numpy as np
-from log import LoggerUtil
+
+sys.path.append("/Users/shukitakeuchi/irt_study/src")
+from util.log import LoggerUtil
 from joblib import Parallel, delayed
 from tqdm import tqdm
 from optimize_x import Opt_x

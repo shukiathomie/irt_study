@@ -1,5 +1,8 @@
+import sys
 import numpy as np
-from log import LoggerUtil
+
+sys.path.append("/Users/shukitakeuchi/irt_study/src")
+from util.log import LoggerUtil
 
 
 class Opt_Z:
