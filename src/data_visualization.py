@@ -1,5 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns  # seabornをインポート
+
+sns.set()
 
 
 class data_visualization:
