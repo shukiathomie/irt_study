@@ -1,7 +1,6 @@
 import numpy as np
 from log import LoggerUtil
 from joblib import Parallel, delayed
-from tqdm import tqdm
 from optimize_x import Opt_x
 from optimize_y import Opt_y
 from optimize_Z import Opt_Z
@@ -46,7 +45,7 @@ class Heu_Algo:
             X_opt[j, :] = x_opt"""
         # 並列化
         with LoggerUtil.tqdm_joblib(self.J):
-            out = Parallel(n_jobs=-1, verbose=0)(
+            out = Parallel(n_jobs=-1)(
                 delayed(Heu_Algo.Parallel_step1)(self, j) for j in range(self.J)
             )
         # self.logger.info(f"{out}")
@@ -76,7 +75,7 @@ class Heu_Algo:
             Y_opt[i, :] = y_opt"""
         # 並列化
         with LoggerUtil.tqdm_joblib(self.I):
-            out = Parallel(n_jobs=-1, verbose=0)(
+            out = Parallel(n_jobs=-1)(
                 delayed(Heu_Algo.Parallel_step4)(self, i, W_opt, Z_opt)
                 for i in range(self.I)
             )

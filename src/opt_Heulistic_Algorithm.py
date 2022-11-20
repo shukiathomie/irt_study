@@ -11,7 +11,7 @@ def main(T):
     # 実験の設定
     T = T
     # パスの指定
-    indpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/data0/10*100"
+    indpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/data0/30*3000"
     outdpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/NonPLmodel/output"
     # データを読み込む
     U_df, Y_df, T_true_df = data_handle.pandas_read(indpath)
@@ -21,7 +21,7 @@ def main(T):
     heu_algo = Heu_Algo(U, Y, T)
     W_est, Y_est, Z_est = heu_algo.process()
     T_est = est_accuracy.show_class(Y_est)
-    repoUtil.output_csv(outdpath, T_est, "T_est")
+    # repoUtil.output_csv(outdpath, T_est, "T_est")
     rsme_class = est_accuracy.rsme_class(T_true, T_est)
     logger.info(f"rsme_class:{rsme_class}")
     # logger.info(f"T_true:{T_true}")
@@ -31,6 +31,6 @@ def main(T):
 
 if __name__ == "__main__":
     T = 10
-    J = 10
+    J = 30
     W_est, Y_est, Z_est = main(T)
     data_visualization.icc_show(W_est, Z_est, J, T)

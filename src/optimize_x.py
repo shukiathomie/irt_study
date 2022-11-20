@@ -31,18 +31,16 @@ class Opt_x:
             lhs = self.model.x_j[t + 1] - self.model.x_j[t]
             self.model.const.add(lhs >= 0)
         # 目的関数
-        expr = np.sum(
-            [
-                [
-                    self.Y[i - 1, t - 1]
-                    * (
-                        (self.U[i - 1, j] * log(self.model.x_j[t]))
-                        + ((1 - self.U[i - 1, j]) * log(1 - self.model.x_j[t]))
-                    )
-                    for i in self.model.I
-                ]
-                for t in self.model.T
-            ]
+        expr = sum(
+            (
+                self.Y[i - 1, t - 1]
+                * (
+                    (self.U[i - 1, j] * log(self.model.x_j[t]))
+                    + ((1 - self.U[i - 1, j]) * log(1 - self.model.x_j[t]))
+                )
+            )
+            for i in self.model.I
+            for t in self.model.T
         )
 
         self.model.obj = pyo.Objective(expr=expr, sense=pyo.maximize)
