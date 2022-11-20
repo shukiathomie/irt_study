@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 from typing import Tuple
 
 
@@ -35,5 +36,6 @@ class data_handle:
         U = U_df.values
         Y = Y_df.values
         T_true = T_true_df.values
+        I, J = np.shape(U)
 
-        return U, Y, T_true
+        return U, Y, T_true, I, J

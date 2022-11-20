@@ -10,21 +10,23 @@ from sklearn.cluster import KMeans
 
 
 class Clustering:
-    def __init__(self, n_clusters, target):
+    def __init__(self, n_clusters, target, J):
         self.logger = LoggerUtil.get_logger(__name__)
         self.n_clusters = n_clusters
         self.target = target
+        self.J = J
 
     def clustered(self):
-        pred = KMeans(n_clusters=self.n_clusters, init="k-means++").fit_predict(
-            self.target
-        )
+
+        pred = KMeans(
+            n_clusters=self.n_clusters, init="k-means++", max_iter=300, n_jobs=-1
+        ).fit_predict(self.target)
         self.logger.info(f"pred:{pred}")
         target_df = pd.DataFrame(self.target)
         self.logger.info(f"X_df:{target_df}")
         target_df["cluster_id"] = pred
         self.logger.info(f"X_df:{target_df}")
         data_visualization.cluster_icc(
-            target_df, self.target, n_cluster=self.n_clusters, J=10
+            target_df, self.target, n_cluster=self.n_clusters, J=self.J
         )
         return target_df

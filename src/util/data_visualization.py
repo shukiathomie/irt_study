@@ -1,5 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set()
 
 
 class data_visualization:
@@ -23,13 +26,11 @@ class data_visualization:
             for i in range(J):
                 if X_df["cluster_id"][i] == j:
                     y = X[i, :]
-                    plt.plot(x, y)
-                else:
-                    continue
+                    plt.plot(x, y, label=f"{i}th item")
+                    plt.legend()
             plt.title(f"cluster_id={j} ICC")
             plt.xlabel("latent abilities")
             plt.ylabel("probarility of correct answer")
-            plt.legend()
             plt.show()
 
     @classmethod
