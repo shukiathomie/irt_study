@@ -13,7 +13,7 @@ def main(T, gamma):
     T = T
     gamma = gamma
     # パスの指定
-    indpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/data0/10*3000"
+    indpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/data0/30*3000"
     outdpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/output"
     # データを読み込む
     U_df, Y_df, T_true_df = data_handle.pandas_read(indpath)
@@ -32,7 +32,7 @@ def main(T, gamma):
 
 if __name__ == "__main__":
     T = 10
-    gamma = 0
+    gamma = 10
     W = main(T, gamma)
     data_visualization.icc_show(W, gamma)
     # gamma = 0
