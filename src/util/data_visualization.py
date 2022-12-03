@@ -36,7 +36,7 @@ class data_visualization:
     @classmethod
     def DMM_icc_show(cls, W, Z, J, T):
         x = np.arange(1, 11)
-        for j in range(5):
+        for j in range(J):
             y = [sum(W[k, t] * Z[j, k] for k in range(J)) for t in range(T)]
             plt.plot(x, y, label=j + 1)
 

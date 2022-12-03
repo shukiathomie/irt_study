@@ -47,10 +47,10 @@ class Opt_W:
         for n in range(self.n_clusters):
             cluster_list = []
             for j in range(self.J):
-                if self.target_df["cluster_id"][j] == 1:
+                if self.target_df["cluster_id"][j] == n:
                     k = np.argmax(self.Z[j, :])
                     cluster_list.append(k + 1)
-                    self.logger.info(f"{cluster_list},append{k+1}")
+                    self.logger.info(f"{n}{cluster_list},append{k+1}")
             cluster_list.sort()
 
             for t in self.model.T:
