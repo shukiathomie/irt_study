@@ -21,12 +21,12 @@ class Clustering:
         pred = KMeans(n_clusters=self.n_clusters, init="k-means++").fit_predict(
             self.target
         )
-        self.logger.info(f"pred:{pred}")
+        # self.logger.info(f"pred:{pred}")
         target_df = pd.DataFrame(self.target)
-        self.logger.info(f"X_df:{target_df}")
+        # self.logger.info(f"X_df:{target_df}")
         target_df["cluster_id"] = pred
-        self.logger.info(f"X_df:{target_df}")
-        data_visualization.cluster_icc(
+        # self.logger.info(f"X_df:{target_df}")
+        """data_visualization.cluster_icc(
             target_df, self.target, n_cluster=self.n_clusters, J=self.J
-        )
+        )"""
         return target_df

@@ -42,31 +42,6 @@ class Opt_W:
                 lhs = self.model.W[k + 1, t] - self.model.W[k, t]
                 self.model.const.add(lhs >= 0)
         # 目的関数
-        """expr = sum(
-            [
-                [
-                    [
-                        [
-                            (
-                                self.Y[i - 1, t - 1]
-                                * self.Z[j - 1, k - 1]
-                                * (
-                                    (self.U[i - 1, j - 1] * log(self.model.W[k, t]))
-                                    + (
-                                        (1 - self.U[i - 1, j - 1])
-                                        * log(1 - self.model.W[k, t])
-                                    )
-                                )
-                            )
-                            for i in self.model.I
-                        ]
-                        for j in self.model.J
-                    ]
-                    for k in self.model.J
-                ]
-                for t in self.model.T
-            ]
-        )"""
         expr = sum(
             (
                 self.Y[i - 1, t - 1]

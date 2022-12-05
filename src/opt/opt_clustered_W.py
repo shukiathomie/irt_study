@@ -50,7 +50,7 @@ class Opt_W:
                 if self.target_df["cluster_id"][j] == n:
                     k = np.argmax(self.Z[j, :])
                     cluster_list.append(k + 1)
-                    self.logger.info(f"{n}{cluster_list},append{k+1}")
+                    # self.logger.info(f"{n}{cluster_list},append{k+1}")
             cluster_list.sort()
 
             for t in self.model.T:
@@ -83,5 +83,5 @@ class Opt_W:
     def solve(self):
         opt = pyo.SolverFactory(self.solver)
         # opt.options["halt_on_ampl_error"] = "yes"
-        opt.solve(self.model, tee=True)
+        opt.solve(self.model, tee=False)
         return pyo.value(self.model.W[:, :]), self.model.Obj()
