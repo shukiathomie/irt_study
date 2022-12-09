@@ -59,11 +59,11 @@ class EM_DMM_Algo:
         )
         f1 = pi * f
         f2 = np.sum(f1, 1).reshape(-1, 1)
-        f3 = f1 / f2
-        Y = EM_DMM_Algo.convert_Y_calss(self, f3)
+        Y = f1 / f2
+        Y_opt = EM_DMM_Algo.convert_Y_calss(self, Y)
         self.logger.info("EStep finish")
         # self.logger.info(f"Y:{Y}")
-        return Y
+        return Y, Y_opt
 
     def MStep(self, Y, Z_opt):
         self.logger.info("MStep start")
@@ -86,23 +86,23 @@ class EM_DMM_Algo:
         # 初期ステップ -> MStep
         i = 1
         # Yを初期化
-        Y = self.init_Y
+        Y_opt = self.init_Y
         self.logger.info("first step")
-        pi, W = EM_DMM_Algo.MStep(self, Y, Z_opt)
+        pi, W = EM_DMM_Algo.MStep(self, Y_opt, Z_opt)
         est_Y = np.empty((self.I, self.T))
-        while np.any(est_Y != Y):
-            est_Y = Y
+        while np.any(est_Y != Y_opt):
+            est_Y = Y_opt
             # 繰り返し回数
             i += 1
             self.logger.info(f"{i}th step")
             # EStep
-            Y = EM_DMM_Algo.EStep(self, pi, W, Z_opt)
+            Y, Y_opt = EM_DMM_Algo.EStep(self, pi, W, Z_opt)
             # MStep
-            pi, W = EM_DMM_Algo.MStep(self, Y, Z_opt)
+            pi, W = EM_DMM_Algo.MStep(self, Y_opt, Z_opt)
             # 収束しない時、50回で終了させる
-            if i == 5:
-                return W, Y
-        return W, Y
+            if i == 20:
+                return W, Y_opt
+        return W, Y_opt
 
     def process(self):
         # step0 init_Y
@@ -133,4 +133,5 @@ class EM_DMM_Algo:
         # emstep
         self.logger.info("emstep")
         W_opt, Y_opt = EM_DMM_Algo.repeat_process(self, Z_opt)
+        self.logger.info("emstep finish")
         return W_opt, Y_opt, Z_opt
