@@ -17,7 +17,7 @@ class Clustering:
         self.J = J
 
     def clustered(self):
-
+        self.logger.info("clustering")
         pred = KMeans(n_clusters=self.n_clusters, init="k-means++").fit_predict(
             self.target
         )

@@ -5,9 +5,8 @@ sys.path.append("/Users/shukitakeuchi/irt_study/src")
 from util.log import LoggerUtil
 from joblib import Parallel, delayed
 from tqdm import tqdm
-from DMM.optimize_x import Opt_x
 from DMM.optimize_Z import Opt_Z
-from opt.opt_clustered_W import Opt_W
+from DMM.opt_clustered_W import Opt_W
 
 
 class EM_DMM_Algo:
@@ -32,16 +31,9 @@ class EM_DMM_Algo:
             Y[i, index[i]] = 1
         return Y
 
-    def Parallel_step1(self, j):  # モデルの作成
-        opt_x = Opt_x(self.U, self.init_Y, self.T)
-        opt_x.modeling(j=j)
-        # モデルの最適化
-        x_opt, obj = opt_x.solve()
-        return x_opt, obj
-
     def EStep(self, pi, W, Z):
 
-        self.logger.info("EStep start")
+        # self.logger.info("EStep start")
         f = np.array(
             [
                 [
@@ -66,7 +58,7 @@ class EM_DMM_Algo:
         return Y, Y_opt
 
     def MStep(self, Y, Z_opt):
-        self.logger.info("MStep start")
+        # self.logger.info("MStep start")
         # piの更新
         pi = np.sum(Y, axis=0) / self.I
 
@@ -77,8 +69,8 @@ class EM_DMM_Algo:
         opt_W.modeling()
         W_opt, obj = opt_W.solve()
         W_opt = np.reshape(W_opt, [self.J, self.T])
-        self.logger.info(f"W optimized ->{W_opt}")
-        self.logger.info("MStep finish")
+        # self.logger.info(f"W optimized ->{W_opt}")
+        # self.logger.info("MStep finish")
         # self.logger.info(f"objective:{obj}")
         return pi, W_opt
 
@@ -98,40 +90,8 @@ class EM_DMM_Algo:
             # EStep
             Y, Y_opt = EM_DMM_Algo.EStep(self, pi, W, Z_opt)
             # MStep
-            pi, W = EM_DMM_Algo.MStep(self, Y_opt, Z_opt)
+            pi, W = EM_DMM_Algo.MStep(self, Y, Z_opt)
             # 収束しない時、50回で終了させる
             if i == 20:
                 return W, Y_opt
         return W, Y_opt
-
-    def process(self):
-        # step0 init_Y
-        # step1
-        self.logger.info("step1")
-        """X_opt = np.empty((self.J, self.T))
-        for j in range(self.J):
-            self.logger.info(f"{j+1}th item optimized")
-            opt_x = Opt_x(self.U, self.init_Y, self.T)
-            opt_x.modeling(j=j)
-            x_opt, obj = opt_x.solve()
-            # self.logger.info(f"x_{j+1}->{x_opt}")
-            X_opt[j, :] = x_opt"""
-        # 並列化
-        with LoggerUtil.tqdm_joblib(self.J):
-            out = Parallel(n_jobs=-1, verbose=0)(
-                delayed(EM_DMM_Algo.Parallel_step1)(self, j) for j in range(self.J)
-            )
-        # self.logger.info(f"{out}")
-        X_opt = np.concatenate([[sample[0]] for sample in out], axis=0)
-        obj = np.concatenate([[sample[1]] for sample in out], axis=0)
-        # self.logger.info(f"X optimized ->{X_opt}")
-        # step2
-        self.logger.info("step2")
-        opt_Z = Opt_Z(self.U, self.T)
-        Z_opt = opt_Z.Est_Diff_Rank(X_opt)
-        # self.logger.info(f"Z optimized ->{Z_opt}")
-        # emstep
-        self.logger.info("emstep")
-        W_opt, Y_opt = EM_DMM_Algo.repeat_process(self, Z_opt)
-        self.logger.info("emstep finish")
-        return W_opt, Y_opt, Z_opt
