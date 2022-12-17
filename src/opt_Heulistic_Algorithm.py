@@ -11,7 +11,7 @@ def main(T):
     # 実験の設定
     T = T
     # パスの指定
-    indpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/data0/30*3000"
+    indpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/data9/30*100"
     outdpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/NonPLmodel/output"
     # データを読み込む
     U_df, Y_df, T_true_df = data_handle.pandas_read(indpath)
@@ -33,4 +33,4 @@ if __name__ == "__main__":
     T = 10
     J = 30
     W_est, Y_est, Z_est = main(T)
-    data_visualization.icc_show(W_est, Z_est, J, T)
+    # data_visualization.icc_show(W_est, Z_est, J, T)

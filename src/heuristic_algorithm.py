@@ -51,19 +51,19 @@ class Heu_Algo:
         # self.logger.info(f"{out}")
         X_opt = np.concatenate([[sample[0]] for sample in out], axis=0)
         obj = np.concatenate([[sample[1]] for sample in out], axis=0)
-        self.logger.info(f"X optimized ->{X_opt}")
+        # self.logger.info(f"X optimized ->{X_opt}")
         # step2
         self.logger.info("step2")
         opt_Z = Opt_Z(self.U, self.T)
         Z_opt = opt_Z.Est_Diff_Rank(X_opt)
-        self.logger.info(f"Z optimized ->{Z_opt}")
+        # self.logger.info(f"Z optimized ->{Z_opt}")
         # step3
         self.logger.info("step3")
         opt_W = Opt_W(self.U, self.init_Y, Z_opt, self.T)
         opt_W.modeling()
         W_opt, obj = opt_W.solve()
         W_opt = np.reshape(W_opt, [self.J, self.T])
-        self.logger.info(f"W optimized ->{W_opt}")
+        # self.logger.info(f"W optimized ->{W_opt}")
         # step4
         self.logger.info("step4")
         """Y_opt = np.empty((self.I, self.T), dtype=int)
@@ -82,5 +82,5 @@ class Heu_Algo:
         # self.logger.info(f"{out}")
         Y_opt = np.concatenate([[sample[0]] for sample in out], axis=0)
         obj = np.concatenate([[sample[1]] for sample in out], axis=0)
-        self.logger.info(f"Y optimized ->{Y_opt}")
+        # self.logger.info(f"Y optimized ->{Y_opt}")
         return W_opt, Y_opt, Z_opt
