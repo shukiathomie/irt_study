@@ -20,7 +20,7 @@ def main(T):
     # 実験の設定
     T = T
     # パスの指定
-    indpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/data0/30*100"
+    indpath = "/Users/shukitakeuchi/Library/Mobile Documents/com~apple~CloudDocs/研究/項目反応理論/data/data0/30*100"
     # データを読み込む
     U_df, Y_df, T_true_df = data_handle.pandas_read(indpath)
     # nparrayに変換
