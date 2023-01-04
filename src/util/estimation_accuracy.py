@@ -16,8 +16,12 @@ class est_accuracy:
         return rsme
 
     @classmethod
-    def show_icc(cls):
-        return
-
-    def rsme_icc(cls, true_x, est_x):
-        return
+    def rmse_icc(cls, icc_true, X):
+        J, T = np.shape(X)
+        rmse = np.sqrt(
+            np.sum(
+                np.square(icc_true[j, t] - X[j, t]) for j in range(J) for t in range(T)
+            )
+            / (J * T)
+        )
+        return rmse
